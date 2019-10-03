@@ -1,24 +1,57 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify, request, redirect, url_for
+import mysql.connector
+from mysql.connector import Error
 from flask_sqlalchemy import SQLAlchemy
-try:
-    import pymysql
-    pymysql.install_as_MySQLdb()
-except ImportError:
-    pass
+import logging
+from opencage.geocoder import OpenCageGeocode
 
 app = Flask(__name__)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{databots}:{password}@{52.14.83.188:3306}/{yelp}'
-db = SQLAlchemy(app)
-
-result = db.engine.execute(" SELECT top 10 from business;")
-print (result)
-
-@app.route('/', methods=['GET', 'POST'])
+ 
+@app.route('/index')
+@app.route('/')
 def index():
-    return render_template('index.html')
+  return render_template('index.html')
+ 
+@app.route('/search', methods=['GET', 'POST'])
+def getRestaurants():
+    try:
+        cursor = None
 
+        city = request.args.get("search")
+        
+        if city:
+            logging.warning("In if")
+            conn = mysql.connector.connect(host='18.221.176.74',
+                                           database='yelp',
+                                           user='databots',
+                                           password='Crazy@123')
+            logging.warning("connection established")
+            cursor = conn.cursor()
+            logging.warning("cursor before select")
+            logging.warning("city is")
+            logging.warning(city)
+            cursor.execute("SELECT * from business where city = %s", (city,))
+            logging.warning("select executed")
+            row = cursor.fetchmany(3)
+            # resp = jsonify(row)
+            resp = row
+            # resp.status_code = 200
+            print(resp)
+            return resp
+        else:
+            logging.warning("In else")
+            resp = jsonify('User "city" not found in query string')
+            # resp.status_code = 500
+            return resp
+    finally: 
+        # if (conn.is_connected()):
+        #     cursor.close()
+        #     conn.close()
+        #     print("MySQL connection is closed")
+        print("here")
+        print(resp)
+        return render_template('search.html', data=jsonify(resp))
+ 
+ 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port= 80)
-
-
+  app.run()

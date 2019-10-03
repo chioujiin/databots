@@ -1,35 +1,81 @@
-<!DOCTYPE html>
 <html>
-  <head>
-    <title>Simple Map</title>
-    <meta name="viewport" content="initial-scale=1.0">
-    <meta charset="utf-8">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="map"></div>
-    <script>
-      var map;
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -34.397, lng: 150.644},
-          zoom: 8
-        });
-      }
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4_-3LihgRch00nwO-cCaym3oiGvrvbKE&callback=initMap"
-    async defer></script>
-  </body>
+
+<head>
+  <title>yelp kinda</title>
+</head>
+<style>
+
+</style>
+
+<body>
+  <form action="/search" method="get">
+    <input id="search" name="search" type="text" placeholder="Search Box">
+    <button id="search_btn" type="button">search</button>
+
+  </form>
+  <!-- direction -->
+  <form action="/destination" method="get">
+    <input id="start" name="start" type="text" name="start" placeholder="start">
+    <input id="end" name="end" type="text" name="end" placeholder="end">
+    <button id="dest_btn" type="button">find</button>
+  </form>
+
+  <div>
+    <table bgcolor="#red" border="10">
+      {% for i in data %}
+      <tr>
+        <td>{{i[0]}}</td>
+        <td>{{i[1]}}</td>
+        <td>{{i[2]}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <div>
+    <table bgcolor="#red" border="10">
+
+      {% for j in records %}
+      <tr>
+        <td>{{j[0]}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+  </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+<script>
+  $(function () {
+    $('#search_btn').click(function () {
+
+      $.ajax({
+        url: '/search',
+        data: $('form').serialize(),
+        type: 'GET',
+        success: function (response) {
+          console.log(response);
+        },
+        error: function (error) {
+          console.log(error);
+        }
+      });
+    });
+    $('#dest_btn').click(function () {
+
+      $.ajax({
+        url: '/destination',
+        data: $('form').serialize(),
+        type: 'GET',
+        success:function(response){
+          console.log(response);
+       },
+        error: function (error) {
+          console.log(error);
+        }
+      });
+    });
+  });
+</script>
+
 </html>

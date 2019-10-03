@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Datatables Example</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css"/>
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+<table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Office</th>
+                <th>Extn.</th>
+                <th>Start date</th>
+                <th>Salary</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Office</th>
+                <th>Extn.</th>
+                <th>Start date</th>
+                <th>Salary</th>
+            </tr>
+        </tfoot>
+    </table>
+<script>
+function setupData() {
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "ajax": {
+                // "url": "static/objects2.txt", // This works for the static file
+                "url": "/search", // This now works too thanks to @kthorngren
+                "dataType": "json",
+                "dataSrc": "data",
+                "contentType":"application/json"
+            },
+            "columns": [
+                {"data": "name"},
+                {"data": "position"},
+                {"data": "office"},
+                {"data": "extn"},
+                {"data": "start_date"},
+                {"data": "salary"}
+            ]
+        });
+    });
+}
+$( window ).on( "load", setupData );
+</script>
+</body>
+</html>
