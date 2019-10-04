@@ -12,6 +12,7 @@
     <input id="search" name="search" type="text" placeholder="Search Box">
     <div class="dropdown">
       <select name="Preference">
+        <option value=""></option>
         <option value="Italian">Italian</option>
         <option value="Bar">Bar</option>
         <option value="Chinese">Chinese</option>
@@ -27,11 +28,12 @@
   </form>
   </table>
   <!-- direction -->
-  <!-- <form action="/destination" method="get">
+  <form action="/destination" method="get">
     <input id="start" name="start" type="text" name="start" placeholder="start">
     <input id="end" name="end" type="text" name="end" placeholder="end">
     <div class="dropdown">
       <select name="Preference">
+        <option value=""></option>
         <option value="Italian">Italian</option>
         <option value="Bar">Bar</option>
         <option value="Chinese">Chinese</option>
@@ -42,7 +44,7 @@
         <option value="Fastfood">Fastfood</option>
       </select>
     </div>
-    <button id="dest_btn" type="button">find</button> -->
+    <button id="dest_btn" type="button">find</button>
   </form>
 
 </body>
@@ -58,7 +60,7 @@
         success: function (response) {
           console.log(response);
           var text = $('form').serialize();
-          window.location = '/search?'+text;
+          window.location = '/search?' + text;
         },
         error: function (error) {
           console.log(error);
@@ -73,6 +75,8 @@
         type: 'GET',
         success: function (response) {
           console.log(response);
+          var text = $('form').serialize();
+          window.location = '/destination?search=&Preference=&' + text;
         },
         error: function (error) {
           console.log(error);
