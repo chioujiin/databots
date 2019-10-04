@@ -1,18 +1,22 @@
 <html>
-<head>
-  <title>Restaurant Search</title>
-</head>
-<body>
-  <!-- the first business question: get the restaurant in the city with the restaurant type the user entered  -->
-  <form action="/search" method="get">
 
-    <!-- the text box for city input -->
+<head>
+  <title>Yelp Restaurant Search</title>
+</head>
+<style>
+
+</style>
+
+<body>
+<!-- the first business question: get the restaurant in the city with the restaurant type the user entered  -->
+
+  <form action="/search" method="get">
+  <!-- the text box for city input -->
     <input id="search" name="search" type="text" placeholder="Search Box">
 
-    <!-- the dropdown for restaurant preference, default to none if not selected -->
+    <!-- the dropdown for restaurant preference, default to none if not selected -->    
     <div class="dropdown">
       <select name="Preference">
-        <option value=""></option>
         <option value="Italian">Italian</option>
         <option value="Bar">Bar</option>
         <option value="Chinese">Chinese</option>
@@ -26,12 +30,13 @@
 
     <!-- the submit button for the first business question-->
     <button id="search_btn" type="button">search</button>
+
   </form>
   </table>
-
+  <!-- direction -->
   <!-- the second business question: get the restaurant between the two cities with the restaurant type the user entered  -->
-  <form action="/destination" method="get">
 
+  <form action="/destination" method="get">
     <!-- the starting city  -->
     <input id="start" name="start" type="text" name="start" placeholder="start">
     <!-- the destination city  -->
@@ -40,7 +45,6 @@
     <!-- the dropdown for restaurant preference, default to none if not selected -->
     <div class="dropdown">
       <select name="Preference">
-        <option value=""></option>
         <option value="Italian">Italian</option>
         <option value="Bar">Bar</option>
         <option value="Chinese">Chinese</option>
@@ -51,7 +55,6 @@
         <option value="Fastfood">Fastfood</option>
       </select>
     </div>
-
     <!-- the submit button for the second business question-->
     <button id="dest_btn" type="button">find</button>
   </form>
@@ -59,16 +62,15 @@
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
 <script>
-
-  // when search_btn (the first business question form) is clicked, the request is sent to the /search route
+// when search_btn (the first business question form) is clicked, the request is sent to the /search route
   $(function () {
     $('#search_btn').click(function () {
+
       $.ajax({
         url: '/search',
         data: $('form').serialize(),
         type: 'get',
         success: function (response) {
-
           // if successful, print the response and redirect to the result page
           console.log(response);
           var text = $('form').serialize();
@@ -79,15 +81,14 @@
         }
       });
     });
-
     // when dest_btn (the second business question form) is clicked, the request is sent to the /search route
     $('#dest_btn').click(function () {
+
       $.ajax({
         url: '/destination',
         data: $('form').serialize(),
         type: 'GET',
         success: function (response) {
-
           // if successful, print the response and redirect to the result page
           console.log(response);
           var text = $('form').serialize();
@@ -100,4 +101,5 @@
     });
   });
 </script>
+
 </html>

@@ -1,13 +1,17 @@
 <html>
+
 <head>
     <title>Restaurant Search</title>
 </head>
+<style>
+
+</style>
+
 <body>
     <!-- when clicked, goes back to the previous page, which is index.html -->
     <form action="/">
         <input type="submit" value="back" />
     </form>
-
     <div>
         <!-- the table of results -->
         <table bgcolor="white" border="2">
@@ -19,13 +23,12 @@
                 <th>Review Count</th>
                 <th>Business Hours</th>
             </tr>
-
             <!-- this is the syntax from jinja, a flask data rendereing template -->
             <!-- get the result from response line by line -->
             {% for i in range(0, lenrow) %}
             <tr align="center">
                 {% for j in range(0, lencol) %}
-                <td width="150">{{records1[i][j]}}</td>
+                <td width="150">{{records[i][j]}}</td>
                 {% endfor %}
             </tr>
             {% endfor %}
