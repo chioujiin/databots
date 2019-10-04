@@ -1,24 +1,25 @@
-from flask import Flask, render_template, jsonify, request, redirect, url_for
+from flask import Flask, render_template, jsonify, request, redirect, url_for, make_response
 import mysql.connector
 from mysql.connector import Error
 from flask_sqlalchemy import SQLAlchemy
 import logging
 from opencage.geocoder import OpenCageGeocode
+import json
+import logging
 
 app = Flask(__name__)
  
 @app.route('/index')
 @app.route('/')
 def index():
-  return render_template('index.html')
+  return render_template('search.html')
  
 @app.route('/search', methods=['GET', 'POST'])
 def getRestaurants():
     try:
         cursor = None
 
-        city = request.args.get("search")
-        
+        city = request.args.get('city')
         if city:
             logging.warning("In if")
             conn = mysql.connector.connect(host='18.221.176.74',
@@ -32,26 +33,36 @@ def getRestaurants():
             logging.warning(city)
             cursor.execute("SELECT * from business where city = %s", (city,))
             logging.warning("select executed")
-            row = cursor.fetchmany(3)
-            # resp = jsonify(row)
-            resp = row
-            # resp.status_code = 200
-            print(resp)
-            return resp
+            row = cursor.fetchall()
+            logging.warning("after fetchall")
+            resp = []
+            for result in row:
+                resultDict = { 'a': result[0],
+                'b': result[1],
+                'c': result[2],
+                'd': result[3],
+                'e': result[4],
+                'f': result[5],
+                'g': result[6],
+                'h': result[7],
+                'i': result[8],
+                'j': result[9],
+                'k': result[10],
+                'l': result[11],
+                'm': result[12]
+                }
+                resp.append(resultDict)
+            logging.warning("after for loop")
+            logging.warning("before json dumps")
+            return render_template('search.html', resp = json.dumps(resp))
+            # return json.dumps(resp)
+            # headers = {'Content-Type': 'text/html'}
+            # return make_response(render_template('search.html', resp = json.dumps(resp)),200,headers)
+
         else:
             logging.warning("In else")
-            resp = jsonify('User "city" not found in query string')
-            # resp.status_code = 500
             return resp
-    finally: 
-        # if (conn.is_connected()):
-        #     cursor.close()
-        #     conn.close()
-        #     print("MySQL connection is closed")
-        print("here")
-        print(resp)
-        return render_template('search.html', data=jsonify(resp))
- 
+    finally: print("end")
  
 if __name__ == '__main__':
   app.run()

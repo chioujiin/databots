@@ -5,6 +5,7 @@ from flask import Flask, render_template, jsonify, request, redirect, url_for
 import logging
 from opencage.geocoder import OpenCageGeocode
 import simplejson as json
+import datetime
 
 app = Flask(__name__)
 
@@ -13,8 +14,11 @@ def getRestaurants():
     try:
         cursor = None
 
-        city = request.args.get("search")
-        
+        city = request.args.get('search')
+        # preference=request.form.get('Preference')
+        # print(preference)
+        today=datetime.datetime.now()
+        day=today.strftime("%A").lower()
         if city:
             logging.warning("In if")
             conn = mysql.connector.connect(host='18.221.176.74',
@@ -26,28 +30,40 @@ def getRestaurants():
             logging.warning("cursor before select")
             logging.warning("city is")
             logging.warning(city)
-            cursor.execute("SELECT * from business where city = %s", (city,))
+            # cursor.execute("SELECT a.name, a.address, a.city, a.stars, a.review_count, b."+day+" from business a, business_hours b where a.city = %s and a.categories like '%Restaurants%' and a.categories like concat('%',%s,'%') and a.business_id=b.business_id", (city,preference))
+            cursor.execute("SELECT a.name, a.address, a.city, a.stars, a.review_count, b."+day+" from business a, business_hours b where a.city = %s  and a.business_id=b.business_id", (city,))
+
             logging.warning("select executed")
-            row = cursor.fetchmany(3)
-            # resp = jsonify(row)
-            resp = row
-            # resp.status_code = 200
-            print(resp)
-            return resp
+            row = cursor.fetchall()
+            logging.warning("after fetchall")
+            resp = []
+            for result in row:
+                resultDict = { 'name': result[0],
+                'address': result[1],
+                'city': result[2],
+                'stars': result[3],
+                'review count': result[4]
+    
+                }
+                resp.append(resultDict)
+            logging.warning("after for loop")
+            logging.warning("before json dumps")
+            #print(resp[0])
+            #print(type(resp[0]))
+            temprow = json.dumps(row)
+            print(temprow)
+            print("type of temprow", type(temprow))
+            #print(jsonify.resp[0])
+            #print(json.dumps(resp[0]))
+            #temp = json.dumps(resp)
+            #print(temp)
+            print("type of row", type(row))
+            #return jsonify(row)
+            return render_template('search.html', lenrow = len(row), lencol = len(row[0]), records1 = row)
         else:
             logging.warning("In else")
-            resp = jsonify('User "city" not found in query string')
-            # resp.status_code = 500
             return resp
-    finally: 
-        # if (conn.is_connected()):
-        #     cursor.close()
-        #     conn.close()
-        #     print("MySQL connection is closed")
-        print("here")
-        print(resp)
-        return render_template('search.html', data=json.dumps(resp))
-
+    finally: print("end")
 #
 # latitude1=0.0
 # latitude2=0.0

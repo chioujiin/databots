@@ -10,39 +10,40 @@
 <body>
   <form action="/search" method="get">
     <input id="search" name="search" type="text" placeholder="Search Box">
+    <!-- <div class="dropdown">
+        <select name="Preference">
+          <option value="Italian">Italian</option>
+          <option value="Bar">Bar</option>
+          <option value="Chinese">Chinese</option>
+          <option value="Mexican">Mexican</option>
+          <option value="American">American</option>
+          <option value="Japanese">Japanese</option>
+          <option value="Breakfast">Breakfast</option>
+          <option value="Fastfood">Fastfood</option>
+        </select>
+      </div> -->
     <button id="search_btn" type="button">search</button>
 
   </form>
   <!-- direction -->
-  <form action="/destination" method="get">
+  <!-- <form action="/destination" method="get">
     <input id="start" name="start" type="text" name="start" placeholder="start">
     <input id="end" name="end" type="text" name="end" placeholder="end">
-    <button id="dest_btn" type="button">find</button>
+    <div class="dropdown">
+      <select name="Preference">
+        <option value="Italian">Italian</option>
+        <option value="Bar">Bar</option>
+        <option value="Chinese">Chinese</option>
+        <option value="Mexican">Mexican</option>
+        <option value="American">American</option>
+        <option value="Japanese">Japanese</option>
+        <option value="Breakfast">Breakfast</option>
+        <option value="Fastfood">Fastfood</option>
+      </select>
+    </div>
+    <button id="dest_btn" type="button">find</button> -->
   </form>
 
-  <div>
-    <table bgcolor="#red" border="10">
-      {% for i in data %}
-      <tr>
-        <td>{{i[0]}}</td>
-        <td>{{i[1]}}</td>
-        <td>{{i[2]}}</td>
-      </tr>
-      {% endfor %}
-    </table>
-  </div>
-
-  <div>
-    <table bgcolor="#red" border="10">
-
-      {% for j in records %}
-      <tr>
-        <td>{{j[0]}}</td>
-      </tr>
-      {% endfor %}
-    </table>
-
-  </div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
 <script>
@@ -52,9 +53,10 @@
       $.ajax({
         url: '/search',
         data: $('form').serialize(),
-        type: 'GET',
+        type: 'get',
         success: function (response) {
           console.log(response);
+          window.location = "/search";
         },
         error: function (error) {
           console.log(error);
@@ -67,9 +69,9 @@
         url: '/destination',
         data: $('form').serialize(),
         type: 'GET',
-        success:function(response){
+        success: function (response) {
           console.log(response);
-       },
+        },
         error: function (error) {
           console.log(error);
         }

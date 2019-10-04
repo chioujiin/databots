@@ -1,58 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-  <title>Datatables Example</title>
-  <meta charset="utf-8">
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css"/>
-  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-  <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+    <title>yelp kinda</title>
 </head>
+<style>
+
+</style>
+
 <body>
-<table id="example" class="display" style="width:100%">
-        <thead>
+    <form action="/">
+        <input type="submit" value="back" />
+    </form>
+    <div>
+        <table bgcolor="white" border="2">
             <tr>
                 <th>Name</th>
-                <th>Position</th>
-                <th>Office</th>
-                <th>Extn.</th>
-                <th>Start date</th>
-                <th>Salary</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>Stars</th>
+                <th>Review Count</th>
+                <th>Business Hours</th>
             </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Office</th>
-                <th>Extn.</th>
-                <th>Start date</th>
-                <th>Salary</th>
+            {% for i in range(0, lenrow) %}
+            <tr align="center">
+                {% for j in range(0, lencol) %}
+                <td width="150">{{records1[i][j]}}</td>
+                {% endfor %}
             </tr>
-        </tfoot>
-    </table>
-<script>
-function setupData() {
-    $(document).ready(function () {
-        $('#example').DataTable({
-            "ajax": {
-                // "url": "static/objects2.txt", // This works for the static file
-                "url": "/search", // This now works too thanks to @kthorngren
-                "dataType": "json",
-                "dataSrc": "data",
-                "contentType":"application/json"
-            },
-            "columns": [
-                {"data": "name"},
-                {"data": "position"},
-                {"data": "office"},
-                {"data": "extn"},
-                {"data": "start_date"},
-                {"data": "salary"}
-            ]
-        });
-    });
-}
-$( window ).on( "load", setupData );
-</script>
+            {% endfor %}
+        </table>
+    </div>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+<script>
+    $(function () {
+        $('#search_btn').click(function () {
+
+            $.ajax({
+                url: '/search',
+                data: $('form').serialize(),
+                type: 'GET',
+                success: function (response) {
+                    console.log(response);
+                    window.location = "/search";
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+
+    });
+</script>
+
 </html>
