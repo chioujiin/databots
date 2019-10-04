@@ -15,8 +15,8 @@ def getRestaurants():
         cursor = None
 
         city = request.args.get('search')
-        # preference=request.form.get('Preference')
-        # print(preference)
+        preference=request.args.get('Preference')
+        print("preference", preference, "city", city)
         today=datetime.datetime.now()
         day=today.strftime("%A").lower()
         if city:
@@ -30,8 +30,8 @@ def getRestaurants():
             logging.warning("cursor before select")
             logging.warning("city is")
             logging.warning(city)
-            # cursor.execute("SELECT a.name, a.address, a.city, a.stars, a.review_count, b."+day+" from business a, business_hours b where a.city = %s and a.categories like '%Restaurants%' and a.categories like concat('%',%s,'%') and a.business_id=b.business_id", (city,preference))
-            cursor.execute("SELECT a.name, a.address, a.city, a.stars, a.review_count, b."+day+" from business a, business_hours b where a.city = %s  and a.business_id=b.business_id", (city,))
+            cursor.execute("SELECT a.name, a.address, a.city, a.stars, a.review_count, b."+day+" from business a, business_hours b where a.city = %s and a.categories like '%Restaurants%' and a.categories like concat('%',%s,'%') and a.business_id=b.business_id", (city,preference))
+            # cursor.execute("SELECT a.name, a.address, a.city, a.stars, a.review_count, b."+day+" from business a, business_hours b where a.city = %s  and a.business_id=b.business_id", (city,))
 
             logging.warning("select executed")
             row = cursor.fetchall()
@@ -64,6 +64,9 @@ def getRestaurants():
             logging.warning("In else")
             return resp
     finally: print("end")
+
+
+
 #
 # latitude1=0.0
 # latitude2=0.0
