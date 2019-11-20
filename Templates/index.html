@@ -87,12 +87,12 @@
       $.ajax({
         url: '/destination',
         data: $('form').serialize(),
-        type: 'GET',
+        type: 'get',
         success: function (response) {
           // if successful, print the response and redirect to the result page
           console.log(response);
           var text = $('form').serialize();
-          window.location = '/destination?search=&Preference=&' + text;
+          window.location = '/destination?' + text;
         },
         error: function (error) {
           console.log(error);
