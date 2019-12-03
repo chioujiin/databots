@@ -16,16 +16,10 @@
         <!-- the table of results -->
         <table bgcolor="white" border="2">
             <tr>
-                <th>business_id</th>
                 <th>name</th>
-                <th>neighborhood</th>
-                <th>address</th>
                 <th>city</th>
                 <th>state</th>
-                <th>postal_code</th>
                 <th>stars</th>
-                <th>is_open</th>
-                <th>categories</th>
                 <th>monday</th>
                 <th>tuesday</th>
                 <th>wednesday</th>
@@ -38,16 +32,10 @@
             <!-- get the result from response line by line -->
             {% for r in records%}
             <tr align="center">
-                    <td>{{r['business_id']}}</td>
                     <td>{{r['name']}}</td>
-                    <td>{{r['neighborhood']}}</td>
-                    <td>{{r['address']}}</td>
                     <td>{{r['city']}}</td>
                     <td>{{r['state']}}</td>
-                    <td>{{r['postal_code']}}</td>
                     <td>{{r['stars']}}</td>
-                    <td>{{r['is_open']}}</td>
-                    <td>{{r['categories']}}</td>
                     <td>{{r['monday']}}</td>
                     <td>{{r['tuesday']}}</td>
                     <td>{{r['wednesday']}}</td>

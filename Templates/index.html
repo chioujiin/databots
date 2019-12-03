@@ -8,15 +8,49 @@
 </style>
 
 <body>
-<!-- the first business question: get the restaurant in the city with the restaurant type the user entered  -->
 
-  <form action="/search" method="get">
-  <!-- the text box for city input -->
-    <input id="search" name="search" type="text" placeholder="Search Box">
+  <!-- in order to let the user insert their businesses and check that the databse do interacts with them -->
+  <form action="/insert" method="get" name="insertForm">
+    <!-- the text box for restuarant input -->
+    <input id="restName" name="restName" type="text" placeholder="Insert Box">
+    <!-- the text box for city input -->
+    <input id="city" name="city" type="text" placeholder="city">
+    <!-- the text box for state input -->
+    <input id="state" name="state" type="text" placeholder="state">
 
-    <!-- the dropdown for restaurant preference, default to none if not selected -->    
+    <!-- the dropdown for restaurant preference, default to none if not selected -->
     <div class="dropdown">
-      <select name="Preference">
+      <select name="Preference1">
+        <option value="Italian">Italian</option>
+        <option value="Bar">Bar</option>
+        <option value="Chinese">Chinese</option>
+        <option value="Mexican">Mexican</option>
+        <option value="American">American</option>
+        <option value="Japanese">Japanese</option>
+        <option value="Breakfast">Breakfast</option>
+        <option value="Fastfood">Fastfood</option>
+      </select>
+    </div>
+    <!-- the dropdown for stars, in order for the search part to work for the newly entered data, the user can set the stars when they enter new data -->
+    <div class="dropdown">
+      <select name="star">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+    </div>
+    <!-- the submit button for the inserting data -->
+    <button id="insert_btn" type="button">insert</button>
+  </form>
+
+  <!-- the first business question: get the restaurant in the city with the restaurant type the user entered  -->
+  <form action="/search" method="get" name="searchForm">
+    <!-- the text box for city input -->
+    <input id="search" name="search" type="text" placeholder="Search Box">
+    <!-- the dropdown for restaurant preference, default to none if not selected -->
+    <div class="dropdown">
+      <select name="Preference2">
         <option value="Italian">Italian</option>
         <option value="Bar">Bar</option>
         <option value="Chinese">Chinese</option>
@@ -28,15 +62,23 @@
       </select>
     </div>
 
+    <!-- filter that users might need for the quality of restuarants -->
+    <div class="dropdown">
+      <select name="stars">
+        <option value="3">above 3</option>
+        <option value="4">above 4</option>
+      </select>
+    </div>
+
     <!-- the submit button for the first business question-->
     <button id="search_btn" type="button">search</button>
-
   </form>
   </table>
+
+
   <!-- direction -->
   <!-- the second business question: get the restaurant between the two cities with the restaurant type the user entered  -->
-
-  <form action="/destination" method="get">
+  <form action="/destination" method="get" name="destForm">
     <!-- the starting city  -->
     <input id="start" name="start" type="text" name="start" placeholder="start">
     <!-- the destination city  -->
@@ -44,7 +86,7 @@
 
     <!-- the dropdown for restaurant preference, default to none if not selected -->
     <div class="dropdown">
-      <select name="Preference">
+      <select name="Preference3">
         <option value="Italian">Italian</option>
         <option value="Bar">Bar</option>
         <option value="Chinese">Chinese</option>
@@ -62,35 +104,80 @@
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
 <script>
-// when search_btn (the first business question form) is clicked, the request is sent to the /search route
+
+  // when insert_btn is clicked, the request is sent to the /insert route
   $(function () {
-    $('#search_btn').click(function () {
+
+    $('#insert_btn').click(function () {
+      var x = document.forms["insertForm"]["restName"].value;
+      // validation that the user did put in the restaurant name that they wish to enter
+      if (x == "") {
+        alert("InsertBox must be filled out");
+        return false;
+      }
 
       $.ajax({
-        url: '/search',
+        url: '/insert',
         data: $('form').serialize(),
         type: 'get',
         success: function (response) {
-          // if successful, print the response and redirect to the result page
-          console.log(response);
           var text = $('form').serialize();
-          window.location = '/search?' + text;
+          alert("successful")
+          // redirect to index.html
+          window.location = '/';
         },
         error: function (error) {
           console.log(error);
         }
       });
     });
-    // when dest_btn (the second business question form) is clicked, the request is sent to the /search route
+
+    // when search_btn (the first business question form) is clicked, the request is sent to the /search route
+    $('#search_btn').click(function () {
+      // validation that the search box is filled when the form is sent
+      var x = document.forms["searchForm"]["search"].value;
+      if (x == "") {
+        alert("SearchBox must be filled out");
+        return false;
+      }
+
+      $.ajax({
+        url: '/search',
+        data: $('form').serialize(),
+        type: 'get',
+        success: function (response) {
+          // if successful, redirect to the result page
+          var text = $('form').serialize();
+          window.location = '/search?' + text;
+        },
+        error: function (error) {
+          console.log(error);
+          alert("No Data Found");
+        }
+      });
+    });
+
+    // when dest_btn (the second business question form) is clicked, the request is sent to the /destination route
     $('#dest_btn').click(function () {
+
+      // validation that the both coty boxes are filled when the form is sent
+      var x = document.forms["destForm"]["start"].value;
+      var y = document.forms["destForm"]["end"].value;
+
+      if (x == "") {
+        alert("start box must be filled out");
+        return false;
+      } else if (y == "") {
+        alert("destination box must be filled out");
+        return false;
+      }
 
       $.ajax({
         url: '/destination',
         data: $('form').serialize(),
         type: 'get',
         success: function (response) {
-          // if successful, print the response and redirect to the result page
-          console.log(response);
+          // if successful, redirect to the result page
           var text = $('form').serialize();
           window.location = '/destination?' + text;
         },
